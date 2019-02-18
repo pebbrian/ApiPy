@@ -14,9 +14,8 @@ setuptools.setup(
     url="https://github.com/pebbrian/PyApiManager",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
     ],
     install_requires=[
         'requests',

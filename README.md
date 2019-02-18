@@ -1,1 +1,1 @@
-This is a api manager of jarvis mining website.
+This is a usefull api manager.

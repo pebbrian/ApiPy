@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PyApiManager",
-    version="0.0.1",
+    version="0.0.2",
     author="Brian Pierre-Emmanuel",
     author_email="pebrian@outlook.fr",
-    description="A api manager for jarvis mining website.",
+    description="This is a usefull api manager.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pebbrian/PyApiManager",

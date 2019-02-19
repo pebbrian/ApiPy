@@ -12,10 +12,15 @@ class API_Manager:
             Constructeur : charge et stocke la définition de l'API si elle est correcte.
             Lance une erreur spécifique le cas contraire.
         """
-        with open(def_path) as file:
-            API_def = json.load(file)
-            self.check_def(API_def)
-            self.API_def = API_def
+        self.API_list = []
+
+        for path in def_path:
+            with open(path) as file:
+                API_def = json.load(file)
+                self.check_def(API_def)
+                self.API_list.append(API_def)
+
+        self.selected_API = None
 
     def check_def(self, API_def):
         """
@@ -68,20 +73,32 @@ class API_Manager:
         """
             Retourne l'URL de l'API d'après sa définition.
         """
-        return self.API_def['url']
+        return self.selected_API['url']
+
+    def get_name(self):
+        """
+            Retourne le nom de l'API d'après sa définition.
+        """
+        return self.selected_API['name']
+
+    def get_caller(self, request):
+        """
+            Retourne le caller de l'API d'après sa définition.
+        """
+        return self.selected_API[request]['caller']
 
     def get_params(self, request):
         """
             Retourne la liste des paramètres de la requête relative à l'API d'après sa définition
         """
-        return self.API_def['requests'][request]
+        return self.selected_API['requests'][request]
 
     def check_request(self, request):
         """
             Vérifie que la requête soit présente dans la définition.
             Lance une erreur spécifique le cas échéant.
         """
-        if not request in self.API_def['requests']:
+        if not request in self.selected_API['requests']:
             raise Exception('Unknow request : ' + request)
 
     def complete_payload(self, request: str, payload: dict):
@@ -104,11 +121,22 @@ class API_Manager:
             Lance une requête GET en accord avec la définition de l'API
             et retourne le résultat ou lance une erreur le cas échéant.
         """
-        self.check_request(request)
-        payload = self.complete_payload(request, payload)
-        params = self.get_params(request)
-        self.check_params(params, payload)
-        res = requests.get(self.get_url() + '/' + request, payload)
-        if res.status_code == 200:
-            return res.json()
-        return None
+        for i, api in enumerate(self.API_list, start=1):
+            self.selected_API = api
+
+            try:
+                self.check_request(request)
+                payload = self.complete_payload(request, payload)
+                params = self.get_params(request)
+                self.check_params(params, payload)
+
+                res = requests.get(self.get_url() + '/' + self.get_caller(request), payload)
+                if res.status_code == 200:
+                    return self.get_name(), res.json()
+                elif i == len(self.API_list):
+                    return None
+            except Exception:
+                if i <= len(self.API_list) - 1:
+                    continue
+                else:
+                    return None

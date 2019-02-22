@@ -9,7 +9,7 @@ class API_Manager:
 		ver: 190114
 	"""
 
-	def __init__(self, def_path: list):
+	def __init__(self, def_path: (list, tuple)):
 		"""
 			Constructeur : charge et stocke la définition de l'API si elle est correcte.
 			Lance une erreur spécifique le cas contraire.

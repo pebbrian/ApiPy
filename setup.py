@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PyApiManager",
-    version="0.0.3",
-    author="Brian Pierre-Emmanuel",
+    version="0.0.4",
+    author="Brian Pierre-Emmanuel & BESEVIC Ivan",
     author_email="pebrian@outlook.fr",
     description="This is a usefull api manager.",
     long_description=long_description,

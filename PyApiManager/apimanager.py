@@ -30,7 +30,7 @@ class API_Manager:
 			Vérifie que la définition soit correcte.
 			Lance une erreur spécifique le cas contraire.
 		"""
-		if not 'url' or 'requests' not in api_def:
+		if 'url' not in api_def or 'name' not in api_def or 'requests' not in api_def:
 			raise ValueError('"url" and/or "requests" key missing in API definition')
 
 	@staticmethod
@@ -101,7 +101,8 @@ class API_Manager:
 		"""
 			Retourne la liste des paramètres de la requête relative à l'API d'après sa définition
 		"""
-		return {key_param: value_param for key_param, value_param in self.selected_API['requests'][request] if key_param != 'caller'}
+		return {key_param: value_param for key_param, value_param in self.selected_API['requests'][request].items() if
+		        key_param != 'caller'}
 
 	def check_request(self, request):
 		"""
@@ -150,7 +151,7 @@ class API_Manager:
 				if res.status_code == 200:
 					return self.get_name(), res.json()
 				elif i == len(self.API_list):
-					return None
+					return None, None
 			except ValueError as e:
 				if i <= len(self.API_list) - 1:
 					continue
